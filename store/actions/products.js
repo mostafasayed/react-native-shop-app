@@ -37,7 +37,15 @@ export const fetchProducts = () => {
 };
 
 export const deleteProduct = (productId) => {
-  return { type: DELETE_PRODUCT, pid: productId };
+  return async (dispatch) => {
+    const response = await fetch(`${firebaseUrl}/products/${id}.json`, {
+      method: "DELETE",
+    });
+    if (!response.ok) {
+      throw new Error("Some error occured!");
+    }
+    dispatch({ type: DELETE_PRODUCT, pid: productId });
+  };
 };
 
 export const createProduct = (title, imageUrl, description, price) => {
@@ -49,6 +57,9 @@ export const createProduct = (title, imageUrl, description, price) => {
       },
       body: JSON.stringify({ title, imageUrl, description, price }),
     });
+    if (!response.ok) {
+      throw new Error("Some error occured!");
+    }
     const responseData = await response.json();
     return dispatch({
       type: CREATE_PRODUCT,
@@ -64,8 +75,20 @@ export const createProduct = (title, imageUrl, description, price) => {
 };
 
 export const updateProduct = (id, title, imageUrl, description) => {
-  return {
-    type: UPDATE_PRODUCT,
-    productData: { id, title, imageUrl, description },
+  return async (dispatch) => {
+    const response = await fetch(`${firebaseUrl}/products/${id}.json`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title, imageUrl, description }),
+    });
+    if (!response.ok) {
+      throw new Error("Some thing went wrong!");
+    }
+    dispatch({
+      type: UPDATE_PRODUCT,
+      productData: { id, title, imageUrl, description },
+    });
   };
 };
