@@ -38,7 +38,7 @@ export const fetchProducts = () => {
 
 export const deleteProduct = (productId) => {
   return async (dispatch) => {
-    const response = await fetch(`${firebaseUrl}/products/${id}.json`, {
+    const response = await fetch(`${firebaseUrl}/products/${productId}.json`, {
       method: "DELETE",
     });
     if (!response.ok) {
